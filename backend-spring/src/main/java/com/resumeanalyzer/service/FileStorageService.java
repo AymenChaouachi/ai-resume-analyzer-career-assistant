@@ -25,7 +25,8 @@ public class FileStorageService {
 
         Files.copy(
                 file.getInputStream(),
-                Paths.get(filePath)
+                Paths.get(filePath),
+                java.nio.file.StandardCopyOption.REPLACE_EXISTING
         );
 
         return filePath;
