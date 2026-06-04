@@ -1,1 +1,37 @@
-<p>register works!</p>
+<div class="login-container">
+
+  <h1>Create Account</h1>
+
+  <form>
+
+    <input
+      type="text"
+      placeholder="Full Name"
+      [(ngModel)]="fullName"
+      name="fullName"
+    />
+
+    <input
+      type="email"
+      placeholder="Email"
+      [(ngModel)]="email"
+      name="email"
+    />
+
+    <input
+      type="password"
+      placeholder="Password"
+      [(ngModel)]="password"
+      name="password"
+    />
+
+    <button
+      type="button"
+      (click)="register()"
+    >
+      Register
+    </button>
+
+  </form>
+
+</div>

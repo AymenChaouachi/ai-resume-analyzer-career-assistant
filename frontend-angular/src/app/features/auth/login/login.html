@@ -1,1 +1,30 @@
-<p>login works!</p>
+<div class="login-container">
+
+  <h1>AI Resume Analyzer</h1>
+
+  <form>
+
+    <input
+      type="email"
+      placeholder="Email"
+      [(ngModel)]="email"
+      name="email"
+    />
+
+    <input
+      type="password"
+      placeholder="Password"
+      [(ngModel)]="password"
+      name="password"
+    />
+
+    <button
+      type="button"
+      (click)="login()"
+    >
+      Login
+    </button>
+
+  </form>
+
+</div>
