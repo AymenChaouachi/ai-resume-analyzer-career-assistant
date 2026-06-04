@@ -1,1 +1,90 @@
-<p>upload-resume works!</p>
+<div class="upload-container">
+
+  <h1>Upload Resume</h1>
+
+  <input
+    type="file"
+    (change)="onFileSelected($event)"
+  />
+
+  <button
+    (click)="uploadResume()"
+    [disabled]="!selectedFile"
+  >
+    Analyze Resume
+  </button>
+
+  <div *ngIf="analysisResult">
+
+    <h2>
+      ATS Score
+    </h2>
+
+    <p>
+      {{ analysisResult.analysis.ats_score }}
+    </p>
+
+    <h2>
+      Technical Skills
+    </h2>
+
+    <ul>
+
+      <li
+        *ngFor="
+          let skill of
+          analysisResult.analysis.technical_skills
+        "
+      >
+        {{ skill }}
+      </li>
+
+    </ul>
+
+    <h2>
+      Soft Skills
+    </h2>
+
+    <ul>
+
+      <li
+        *ngFor="
+          let skill of
+          analysisResult.analysis.soft_skills
+        "
+      >
+        {{ skill }}
+      </li>
+
+    </ul>
+
+    <h2>
+      Best Job Match
+    </h2>
+
+    <p>
+      {{
+        analysisResult.analysis.job_match.best_match
+      }}
+    </p>
+
+    <h2>
+      Recommendations
+    </h2>
+
+    <ul>
+
+      <li
+        *ngFor="
+          let recommendation of
+          analysisResult.analysis.recommendations
+        "
+      >
+        {{ recommendation }}
+      </li>
+
+    </ul>
+
+  </div>
+
+</div>

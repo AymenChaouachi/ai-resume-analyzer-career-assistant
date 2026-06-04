@@ -4,6 +4,8 @@ import {
   FormsModule
 } from '@angular/forms';
 
+import { CommonModule } from '@angular/common';
+
 import {
   Router
 } from '@angular/router';
@@ -15,7 +17,10 @@ import {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [
+    FormsModule,
+    CommonModule
+  ],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })

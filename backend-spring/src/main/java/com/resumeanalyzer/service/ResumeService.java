@@ -29,7 +29,7 @@ public class ResumeService {
 
     private final AnalysisRepository analysisRepository;
 
-    public ResumeResponse uploadResume(
+    public AIAnalysisResponseDto uploadResume(
             MultipartFile file,
             String email
     ) throws IOException {
@@ -93,11 +93,7 @@ public class ResumeService {
 
         analysisRepository.save(analysis);
 
-        return ResumeResponse.builder()
-                .id(savedResume.getId())
-                .fileName(savedResume.getFileName())
-                .uploadedAt(savedResume.getUploadedAt())
-                .build();
+        return aiResponse;
     }
 
     public List<Resume> getUserResumes(String email) {

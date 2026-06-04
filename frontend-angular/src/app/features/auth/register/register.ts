@@ -4,6 +4,8 @@ import {
   FormsModule
 } from '@angular/forms';
 
+import { CommonModule } from '@angular/common';
+
 import {
   Router
 } from '@angular/router';
@@ -13,9 +15,12 @@ import {
 } from '../../../services/auth';
 
 @Component({
-  selector: 'app-register',
+  selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [
+    FormsModule,
+    CommonModule
+  ],
   templateUrl: './register.html',
   styleUrl: './register.css'
 })

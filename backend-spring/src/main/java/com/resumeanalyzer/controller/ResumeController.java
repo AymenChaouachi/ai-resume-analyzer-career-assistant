@@ -1,6 +1,6 @@
 package com.resumeanalyzer.controller;
 
-import com.resumeanalyzer.dto.resume.ResumeResponse;
+import com.resumeanalyzer.dto.ai.AIAnalysisResponseDto;
 import com.resumeanalyzer.entity.Resume;
 import com.resumeanalyzer.service.ResumeService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class ResumeController {
     private final ResumeService resumeService;
 
     @PostMapping("/upload")
-    public ResumeResponse uploadResume(
+    public AIAnalysisResponseDto uploadResume(
             @RequestParam("file") MultipartFile file,
             @RequestParam("email") String email
     ) throws IOException {
