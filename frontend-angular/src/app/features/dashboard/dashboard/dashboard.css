@@ -1,0 +1,23 @@
+.dashboard-container {
+  padding: 30px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(250px, 1fr)
+  );
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.stat-card {
+  padding: 20px;
+  text-align: center;
+}
+
+.recent-card {
+  margin-top: 30px;
+  padding: 20px;
+}

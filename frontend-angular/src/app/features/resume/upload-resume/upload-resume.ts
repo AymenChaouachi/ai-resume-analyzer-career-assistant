@@ -6,11 +6,21 @@ import {
   ResumeService
 } from '../../../services/resume';
 
+import { MatCardModule } from '@angular/material/card';
+
+import { MatChipsModule } from '@angular/material/chips';
+
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+
+
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
+    MatCardModule,
+    MatChipsModule,
+    MatProgressBarModule
   ],
   templateUrl: './upload-resume.html',
   styleUrl: './upload-resume.css'

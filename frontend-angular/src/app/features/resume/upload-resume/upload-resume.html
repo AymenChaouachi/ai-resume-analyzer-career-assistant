@@ -1,89 +1,123 @@
 <div class="upload-container">
 
-  <h1>Upload Resume</h1>
+  <mat-card class="upload-card">
 
-  <input
-    type="file"
-    (change)="onFileSelected($event)"
-  />
+    <h1>
+      AI Resume Analyzer
+    </h1>
 
-  <button
-    (click)="uploadResume()"
-    [disabled]="!selectedFile"
-  >
-    Analyze Resume
-  </button>
+    <input
+      type="file"
+      (change)="onFileSelected($event)"
+    />
+
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="uploadResume()"
+      [disabled]="!selectedFile"
+    >
+      Analyze Resume
+    </button>
+
+  </mat-card>
 
   <div *ngIf="analysisResult">
 
-    <h2>
-      ATS Score
-    </h2>
+    <mat-card class="result-card">
 
-    <p>
-      {{ analysisResult.analysis.ats_score }}
-    </p>
+      <h2>
+        ATS Score
+      </h2>
 
-    <h2>
-      Technical Skills
-    </h2>
-
-    <ul>
-
-      <li
-        *ngFor="
-          let skill of
-          analysisResult.analysis.technical_skills
-        "
+      <mat-progress-bar
+        mode="determinate"
+        [value]="analysisResult.analysis.ats_score"
       >
-        {{ skill }}
-      </li>
+      </mat-progress-bar>
 
-    </ul>
+      <h1>
+        {{ analysisResult.analysis.ats_score }}%
+      </h1>
 
-    <h2>
-      Soft Skills
-    </h2>
+    </mat-card>
 
-    <ul>
+    <mat-card class="result-card">
 
-      <li
-        *ngFor="
-          let skill of
-          analysisResult.analysis.soft_skills
-        "
-      >
-        {{ skill }}
-      </li>
+      <h2>
+        Technical Skills
+      </h2>
 
-    </ul>
+      <mat-chip-set>
 
-    <h2>
-      Best Job Match
-    </h2>
+        <mat-chip
+          *ngFor="
+            let skill of
+            analysisResult.analysis.technical_skills
+          "
+        >
+          {{ skill }}
+        </mat-chip>
 
-    <p>
-      {{
-        analysisResult.analysis.job_match.best_match
-      }}
-    </p>
+      </mat-chip-set>
 
-    <h2>
-      Recommendations
-    </h2>
+    </mat-card>
 
-    <ul>
+    <mat-card class="result-card">
 
-      <li
-        *ngFor="
-          let recommendation of
-          analysisResult.analysis.recommendations
-        "
-      >
-        {{ recommendation }}
-      </li>
+      <h2>
+        Soft Skills
+      </h2>
 
-    </ul>
+      <mat-chip-set>
+
+        <mat-chip
+          *ngFor="
+            let skill of
+            analysisResult.analysis.soft_skills
+          "
+        >
+          {{ skill }}
+        </mat-chip>
+
+      </mat-chip-set>
+
+    </mat-card>
+
+    <mat-card class="result-card">
+
+      <h2>
+        Best Job Match
+      </h2>
+
+      <h3>
+        {{
+          analysisResult.analysis.job_match.best_match
+        }}
+      </h3>
+
+    </mat-card>
+
+    <mat-card class="result-card">
+
+      <h2>
+        Recommendations
+      </h2>
+
+      <ul>
+
+        <li
+          *ngFor="
+            let recommendation of
+            analysisResult.analysis.recommendations
+          "
+        >
+          {{ recommendation }}
+        </li>
+
+      </ul>
+
+    </mat-card>
 
   </div>
 
