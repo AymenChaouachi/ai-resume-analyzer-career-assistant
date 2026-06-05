@@ -9,6 +9,8 @@ import { UploadResume } from './features/resume/upload-resume/upload-resume';
 
 import { Chatbot } from './features/chatbot/chatbot/chatbot';
 
+import { JobMatch } from './features/job-match/job-match/job-match';
+
 import {
   ResumeHistory
 } from './features/resume/resume-history/resume-history';
@@ -60,11 +62,20 @@ export const routes: Routes = [
   },
 
   {
+    path: 'job-match',
+    component: JobMatch,
+    canActivate: [
+      authGuard
+    ]
+  },
+
+  {
   path: 'history',
   component: ResumeHistory,
   canActivate: [
     authGuard
   ]
-  }
+  },
+
 
 ];

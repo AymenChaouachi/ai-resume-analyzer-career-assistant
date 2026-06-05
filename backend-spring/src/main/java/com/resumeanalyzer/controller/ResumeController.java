@@ -1,8 +1,11 @@
 package com.resumeanalyzer.controller;
 
 import com.resumeanalyzer.dto.ai.AIAnalysisResponseDto;
+import com.resumeanalyzer.dto.ai.JobMatchRequestDto;
+import com.resumeanalyzer.dto.ai.JobMatchResponseDto;
 import com.resumeanalyzer.dto.resume.DashboardSummaryResponse;
 import com.resumeanalyzer.entity.Resume;
+import com.resumeanalyzer.service.AIIntegrationService;
 import com.resumeanalyzer.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,8 @@ import com.resumeanalyzer.dto.resume.ResumeHistoryResponse;
 public class ResumeController {
 
     private final ResumeService resumeService;
+
+    private final AIIntegrationService aiIntegrationService;
 
     @PostMapping("/upload")
     public AIAnalysisResponseDto uploadResume(
@@ -55,5 +60,16 @@ public class ResumeController {
 
         return resumeService
                 .getDashboardSummary(email);
+    }
+
+    @PostMapping("/job-match")
+    public JobMatchResponseDto analyzeJobMatch(
+            @RequestBody JobMatchRequestDto request
+    ) {
+
+        return aiIntegrationService.analyzeJobMatch(
+                request.getResumeText(),
+                request.getJobDescription()
+        );
     }
 }

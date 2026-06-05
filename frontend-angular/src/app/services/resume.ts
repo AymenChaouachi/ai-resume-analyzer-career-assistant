@@ -26,6 +26,10 @@ import {
   DashboardSummary
 } from '../models/dashboard-summary.model';
 
+import {
+  JobMatchResult
+} from '../models/job-match.model';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -89,6 +93,20 @@ export class ResumeService {
 
       `${this.apiUrl}/dashboard?email=${encodeURIComponent(email)}`
 
+    );
+  }
+
+  analyzeJobMatch(
+    resumeText: string,
+    jobDescription: string
+  ): Observable<JobMatchResult> {
+
+    return this.http.post<JobMatchResult>(
+      `${this.apiUrl}/job-match`,
+      {
+        resumeText,
+        jobDescription
+      }
     );
   }
 
