@@ -9,28 +9,51 @@
     <mat-card-content>
 
       <input
+        id="resume-file"
+        class="file-input"
         type="file"
+        accept=".pdf,.doc,.docx"
         (change)="onFileSelected($event)"
       />
+
+      <label
+        class="file-picker"
+        for="resume-file"
+      >
+        {{ selectedFile()?.name || 'Choose resume file' }}
+      </label>
 
       <button
         mat-raised-button
         color="primary"
         (click)="uploadResume()"
-        [disabled]="!selectedFile || isLoading"
+        [disabled]="!selectedFile() || isLoading()"
       >
 
-        {{ isLoading ? 'Analyzing...' : 'Analyze Resume' }}
+        {{ isLoading() ? 'Analyzing...' : 'Analyze Resume' }}
 
       </button>
+
+      <p
+        class="error-message"
+        *ngIf="errorMessage()"
+      >
+        {{ errorMessage() }}
+      </p>
+
+      <mat-progress-bar
+        *ngIf="isLoading()"
+        mode="indeterminate"
+      ></mat-progress-bar>
 
     </mat-card-content>
 
   </mat-card>
 
+  <ng-container *ngIf="analysisResult() as result">
+
   <mat-card
     class="result-card"
-    *ngIf="analysisResult"
   >
 
     <mat-card-title>
@@ -40,8 +63,13 @@
     <mat-card-content>
 
       <h1>
-        {{ analysisResult.analysis.ats_score }}
+        {{ result.analysis.ats_score }}
       </h1>
+
+      <p class="muted">
+        Best match: {{ result.analysis.job_match.best_match }}
+        ({{ result.analysis.job_match.score }})
+      </p>
 
     </mat-card-content>
 
@@ -49,7 +77,6 @@
 
   <mat-card
     class="result-card"
-    *ngIf="analysisResult"
   >
 
     <mat-card-title>
@@ -63,7 +90,7 @@
         <mat-chip
           *ngFor="
             let skill of
-            analysisResult.analysis.technical_skills
+            result.analysis.technical_skills
           "
         >
           {{ skill }}
@@ -74,5 +101,30 @@
     </mat-card-content>
 
   </mat-card>
+
+  <mat-card class="result-card">
+
+    <mat-card-title>
+      Recommendations
+    </mat-card-title>
+
+    <mat-card-content>
+
+      <ul class="recommendations">
+        <li
+          *ngFor="
+            let recommendation of
+            result.analysis.recommendations
+          "
+        >
+          {{ recommendation }}
+        </li>
+      </ul>
+
+    </mat-card-content>
+
+  </mat-card>
+
+  </ng-container>
 
 </div>

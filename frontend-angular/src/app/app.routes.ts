@@ -13,6 +13,10 @@ import {
   ResumeHistory
 } from './features/resume/resume-history/resume-history';
 
+import {
+  authGuard
+} from './services/auth.guard';
+
 export const routes: Routes = [
 
   {
@@ -33,22 +37,34 @@ export const routes: Routes = [
 
   {
     path: 'dashboard',
-    component: Dashboard
+    component: Dashboard,
+    canActivate: [
+      authGuard
+    ]
   },
 
   {
     path: 'upload',
-    component: UploadResume
+    component: UploadResume,
+    canActivate: [
+      authGuard
+    ]
   },
 
   {
     path: 'chatbot',
-    component: Chatbot
+    component: Chatbot,
+    canActivate: [
+      authGuard
+    ]
   },
 
   {
   path: 'history',
-  component: ResumeHistory
+  component: ResumeHistory,
+  canActivate: [
+    authGuard
+  ]
   }
 
 ];

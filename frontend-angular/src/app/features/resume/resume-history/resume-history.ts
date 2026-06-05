@@ -1,55 +1,105 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  OnInit,
+  signal
+} from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
-import { ResumeService }
-from '../../../services/resume';
+import {
+  MatButtonModule
+} from '@angular/material/button';
 
-import { Router } from '@angular/router';
+import {
+  ResumeService
+} from '../../../services/resume';
+
+import {
+  takeUntilDestroyed
+} from '@angular/core/rxjs-interop';
+
+import {
+  ResumeHistory as ResumeHistoryItem
+} from '../../../models/resume-history.model';
 
 @Component({
   selector: 'app-resume-history',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    MatButtonModule
+  ],
   templateUrl: './resume-history.html',
   styleUrl: './resume-history.css'
 })
-export class ResumeHistory {
+export class ResumeHistory implements OnInit {
 
-  histories: any[] = [];
+  histories =
+    signal<ResumeHistoryItem[]>([]);
+
+  isLoading =
+    signal(false);
+
+  errorMessage =
+    signal('');
 
   constructor(
-  private resumeService: ResumeService,
-  private router: Router
-) {
-}
+    private resumeService: ResumeService,
+    private destroyRef: DestroyRef
+  ) {
+  }
 
   ngOnInit(): void {
 
-  const email = localStorage.getItem('email');
+    this.loadHistory();
 
-  console.log('Stored email:', email);
-
-  if (!email) {
-    console.error('No email found in localStorage');
-    return;
+    this.resumeService.historyRefresh$
+      .pipe(
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => this.loadHistory());
   }
 
-  this.resumeService
-    .getResumeHistory(email)
-    .subscribe({
+  loadHistory(): void {
 
-  next: (response) => {
+    const email =
+      localStorage.getItem('email') || '';
 
-    console.log(response);
+    if (!email) {
 
-    this.histories = response;
-  },
+      this.errorMessage.set('Please log in again to view resume history.');
 
-  error: (error) => {
+      this.histories.set([]);
 
-    console.error(error);
+      return;
+    }
+
+    this.isLoading.set(true);
+
+    this.errorMessage.set('');
+
+    this.resumeService
+      .getResumeHistory(email)
+      .subscribe({
+
+        next: (response) => {
+
+          this.histories.set(response);
+
+          this.isLoading.set(false);
+        },
+
+        error: () => {
+
+          this.histories.set([]);
+
+          this.errorMessage.set(
+            'Unable to load resume history. Please try again.'
+          );
+
+          this.isLoading.set(false);
+        }
+      });
   }
-});
-}
 }

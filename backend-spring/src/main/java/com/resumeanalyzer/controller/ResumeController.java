@@ -1,6 +1,7 @@
 package com.resumeanalyzer.controller;
 
 import com.resumeanalyzer.dto.ai.AIAnalysisResponseDto;
+import com.resumeanalyzer.dto.resume.DashboardSummaryResponse;
 import com.resumeanalyzer.entity.Resume;
 import com.resumeanalyzer.service.ResumeService;
 import lombok.RequiredArgsConstructor;
@@ -44,5 +45,15 @@ public class ResumeController {
 
         return resumeService
                 .getResumeHistory(email);
+    }
+
+    @GetMapping("/dashboard")
+    public DashboardSummaryResponse
+    getDashboardSummary(
+            @RequestParam String email
+    ) {
+
+        return resumeService
+                .getDashboardSummary(email);
     }
 }

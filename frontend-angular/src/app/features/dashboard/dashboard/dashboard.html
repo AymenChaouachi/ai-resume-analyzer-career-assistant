@@ -1,65 +1,163 @@
 <div class="dashboard-container">
 
-  <h1>
-    Welcome to AI Resume Analyzer
-  </h1>
+  <div class="dashboard-header">
 
-  <div class="stats-grid">
-
-    <mat-card class="stat-card">
-
-      <h2>
-        ATS Score
-      </h2>
+    <div>
 
       <h1>
-        100%
+        Dashboard
       </h1>
 
-    </mat-card>
+      <p>
+        Resume performance analytics from your uploaded history.
+      </p>
 
-    <mat-card class="stat-card">
+    </div>
 
-      <h2>
-        Total Uploads
-      </h2>
-
-      <h1>
-        3
-      </h1>
-
-    </mat-card>
-
-    <mat-card class="stat-card">
-
-      <h2>
-        Best Match
-      </h2>
-
-      <h3>
-        Software Engineer Intern
-      </h3>
-
-    </mat-card>
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      (click)="loadDashboard()"
+      [disabled]="isLoading()"
+    >
+      Refresh
+    </button>
 
   </div>
 
-  <mat-card class="recent-card">
+  <mat-progress-bar
+    *ngIf="isLoading()"
+    mode="indeterminate"
+  ></mat-progress-bar>
 
-    <h2>
-      Recent Analysis
-    </h2>
+  <p
+    class="error-message"
+    *ngIf="errorMessage()"
+  >
+    {{ errorMessage() }}
+  </p>
 
-    <p>
-      Latest ATS score:
-      100%
-    </p>
+  <ng-container *ngIf="summary() as dashboard">
 
-    <p>
-      Top skills:
-      Java, Angular, Spring Boot
-    </p>
+    <div class="stats-grid">
 
-  </mat-card>
+      <mat-card class="stat-card">
+
+        <h2>
+          Total Uploads
+        </h2>
+
+        <strong>
+          {{ dashboard.totalUploads }}
+        </strong>
+
+      </mat-card>
+
+      <mat-card class="stat-card">
+
+        <h2>
+          Latest ATS Score
+        </h2>
+
+        <strong>
+          {{ dashboard.latestAtsScore ?? 'No analysis' }}
+        </strong>
+
+      </mat-card>
+
+      <mat-card class="stat-card">
+
+        <h2>
+          Best ATS Score
+        </h2>
+
+        <strong>
+          {{ dashboard.bestAtsScore ?? 'No analysis' }}
+        </strong>
+
+      </mat-card>
+
+      <mat-card class="stat-card">
+
+        <h2>
+          Best Job Match
+        </h2>
+
+        <strong class="job-match">
+          {{ dashboard.bestJobMatch || 'No analysis yet' }}
+        </strong>
+
+      </mat-card>
+
+    </div>
+
+    <mat-card class="recent-card">
+
+      <h2>
+        Recent Analysis
+      </h2>
+
+      <p *ngIf="dashboard.latestFileName">
+        {{ dashboard.latestFileName }}
+      </p>
+
+      <p *ngIf="dashboard.latestUploadedAt">
+        Uploaded {{ dashboard.latestUploadedAt | date: 'medium' }}
+      </p>
+
+      <div
+        class="summary-section"
+        *ngIf="dashboard.topSkills.length > 0"
+      >
+
+        <h3>
+          Top Skills
+        </h3>
+
+        <mat-chip-set>
+
+          <mat-chip
+            *ngFor="let skill of dashboard.topSkills"
+          >
+            {{ skill }}
+          </mat-chip>
+
+        </mat-chip-set>
+
+      </div>
+
+      <div
+        class="summary-section"
+        *ngIf="dashboard.recommendations.length > 0"
+      >
+
+        <h3>
+          Recommendations
+        </h3>
+
+        <ul>
+          <li
+            *ngFor="
+              let recommendation of
+              dashboard.recommendations
+            "
+          >
+            {{ recommendation }}
+          </li>
+        </ul>
+
+      </div>
+
+      <p
+        class="empty-message"
+        *ngIf="dashboard.totalUploads === 0"
+      >
+        Upload a resume to populate dashboard analytics.
+      </p>
+
+    </mat-card>
+
+  </ng-container>
 
 </div>

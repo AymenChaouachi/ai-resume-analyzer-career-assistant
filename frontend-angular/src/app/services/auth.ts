@@ -1,4 +1,7 @@
-import { Injectable } from '@angular/core';
+import {
+  Injectable,
+  signal
+} from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
 
@@ -17,6 +20,9 @@ export class AuthService {
 
   private apiUrl =
     `${environment.apiUrl}/auth`;
+
+  private authenticated =
+    signal(!!localStorage.getItem('token'));
 
   constructor(
     private http: HttpClient
@@ -49,6 +55,8 @@ export class AuthService {
       'token',
       token
     );
+
+    this.authenticated.set(true);
   }
 
   getToken(): string | null {
@@ -63,10 +71,16 @@ export class AuthService {
     localStorage.removeItem(
       'token'
     );
+
+    localStorage.removeItem(
+      'email'
+    );
+
+    this.authenticated.set(false);
   }
 
   isAuthenticated(): boolean {
 
-    return !!this.getToken();
+    return this.authenticated();
   }
 }

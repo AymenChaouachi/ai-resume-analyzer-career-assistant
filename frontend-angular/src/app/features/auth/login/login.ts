@@ -51,7 +51,7 @@ export class Login {
 
         localStorage.setItem(
           'email',
-          this.email
+          response.email || this.email
         );
 
         this.router.navigate([

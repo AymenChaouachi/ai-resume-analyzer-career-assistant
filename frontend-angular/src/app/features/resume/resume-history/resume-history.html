@@ -1,42 +1,81 @@
-<h1>Resume History</h1>
+<section class="history-page">
 
-<table *ngIf="histories.length > 0">
+  <div class="history-header">
 
-  <thead>
-    <tr>
-      <th>Resume</th>
-      <th>ATS Score</th>
-      <th>Best Match</th>
-      <th>Uploaded At</th>
-    </tr>
-  </thead>
+    <h1>Resume History</h1>
 
-  <tbody>
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      (click)="loadHistory()"
+      [disabled]="isLoading()"
+    >
+      Refresh
+    </button>
 
-    <tr *ngFor="let history of histories">
+  </div>
 
-      <td>
-        {{ history.fileName }}
-      </td>
+  <p
+    class="status"
+    *ngIf="isLoading()"
+  >
+    Loading resume history...
+  </p>
 
-      <td>
-        {{ history.atsScore }}
-      </td>
+  <p
+    class="error-message"
+    *ngIf="errorMessage()"
+  >
+    {{ errorMessage() }}
+  </p>
 
-      <td>
-        {{ history.bestJobMatch }}
-      </td>
+  <table *ngIf="histories().length > 0">
 
-      <td>
-        {{ history.uploadedAt }}
-      </td>
+    <thead>
+      <tr>
+        <th>Resume</th>
+        <th>ATS Score</th>
+        <th>Best Match</th>
+        <th>Uploaded At</th>
+      </tr>
+    </thead>
 
-    </tr>
+    <tbody>
 
-  </tbody>
+      <tr *ngFor="let history of histories()">
 
-</table>
+        <td>
+          {{ history.fileName }}
+        </td>
 
-<p *ngIf="histories.length === 0">
-  No resumes found.
-</p>
+        <td>
+          {{ history.atsScore }}
+        </td>
+
+        <td>
+          {{ history.bestJobMatch }}
+        </td>
+
+        <td>
+          {{ history.uploadedAt | date: 'medium' }}
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+  <p
+    class="status"
+    *ngIf="
+      !isLoading() &&
+      !errorMessage() &&
+      histories().length === 0
+    "
+  >
+    No resumes found.
+  </p>
+
+</section>

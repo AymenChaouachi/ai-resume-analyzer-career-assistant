@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  signal
+} from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
@@ -22,6 +25,14 @@ import {
   MatProgressBarModule
 } from '@angular/material/progress-bar';
 
+import {
+  finalize
+} from 'rxjs';
+
+import {
+  AIAnalysisResponse
+} from '../../../models/analysis-result.model';
+
 @Component({
   selector: 'app-upload-resume',
 
@@ -41,63 +52,82 @@ import {
 })
 export class UploadResume {
 
-  selectedFile!: File;
+  selectedFile =
+    signal<File | null>(null);
 
-  analysisResult: any;
+  analysisResult =
+    signal<AIAnalysisResponse | null>(null);
 
-  isLoading = false;
+  isLoading =
+    signal(false);
 
-  email =
-    localStorage.getItem('email') || '';
+  errorMessage =
+    signal('');
 
   constructor(
     private resumeService: ResumeService
   ) {
   }
 
-  onFileSelected(event: any): void {
+  onFileSelected(event: Event): void {
 
-  const file = event.target.files[0];
+  const input =
+    event.target as HTMLInputElement;
 
-  if (file) {
+  const file =
+    input.files?.[0] ?? null;
 
-    this.selectedFile = file;
+  this.selectedFile.set(file);
 
-    console.log(
-      'Selected file:',
-      this.selectedFile
-    );
+  this.analysisResult.set(null);
+
+  this.errorMessage.set('');
   }
-}
 
   uploadResume(): void {
 
-    if (!this.selectedFile) {
+    const file =
+      this.selectedFile();
+
+    const email =
+      localStorage.getItem('email') || '';
+
+    if (!file) {
+
+      this.errorMessage.set('Select a resume file before analyzing.');
 
       return;
     }
 
-    this.isLoading = true;
+    if (!email) {
+
+      this.errorMessage.set('Please log in again before uploading a resume.');
+
+      return;
+    }
+
+    this.isLoading.set(true);
+
+    this.errorMessage.set('');
 
     this.resumeService.uploadResume(
-      this.selectedFile,
-      this.email
-    ).subscribe({
+      file,
+      email
+    ).pipe(
+      finalize(() => this.isLoading.set(false))
+    )
+    .subscribe({
 
       next: (response) => {
 
-        console.log(response);
-
-        this.analysisResult = response;
-
-        this.isLoading = false;
+        this.analysisResult.set(response);
       },
 
-      error: (error) => {
+      error: () => {
 
-        console.error(error);
-
-        this.isLoading = false;
+        this.errorMessage.set(
+          'Resume analysis failed. Please try again.'
+        );
       }
     });
   }

@@ -2,6 +2,7 @@ package com.resumeanalyzer.service;
 
 import com.resumeanalyzer.dto.resume.ResumeHistoryResponse;
 import com.resumeanalyzer.dto.resume.ResumeResponse;
+import com.resumeanalyzer.dto.resume.DashboardSummaryResponse;
 import com.resumeanalyzer.entity.Resume;
 import com.resumeanalyzer.entity.User;
 import com.resumeanalyzer.repository.ResumeRepository;
@@ -16,6 +17,8 @@ import com.resumeanalyzer.repository.AnalysisRepository;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import java.util.stream.Collectors;
@@ -183,5 +186,132 @@ for (Resume r : resumes) {
         .collect(Collectors.toList());
         }
 
+    public DashboardSummaryResponse
+        getDashboardSummary(
+                String email
+        ) {
+
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "User not found"
+                        )
+                );
+
+        List<Resume> resumes =
+                resumeRepository.findByUser(user);
+
+        List<Resume> analyzedResumes =
+                resumes.stream()
+                        .filter(resume ->
+                                resume.getAnalysis() != null
+                        )
+                        .sorted(
+                                Comparator.comparing(
+                                        Resume::getUploadedAt,
+                                        Comparator.nullsLast(
+                                                Comparator.reverseOrder()
+                                        )
+                                )
+                        )
+                        .collect(Collectors.toList());
+
+        Resume latestResume =
+                analyzedResumes.stream()
+                        .findFirst()
+                        .orElse(null);
+
+        Resume bestResume =
+                analyzedResumes.stream()
+                        .filter(resume ->
+                                resume.getAnalysis()
+                                        .getAtsScore() != null
+                        )
+                        .max(
+                                Comparator.comparing(
+                                        resume -> resume
+                                                .getAnalysis()
+                                                .getAtsScore()
+                                )
+                        )
+                        .orElse(null);
+
+        return DashboardSummaryResponse.builder()
+                .totalUploads(
+                        resumes.size()
+                )
+                .latestAtsScore(
+                        latestResume != null
+                                ? latestResume.getAnalysis()
+                                        .getAtsScore()
+                                : null
+                )
+                .bestAtsScore(
+                        bestResume != null
+                                ? bestResume.getAnalysis()
+                                        .getAtsScore()
+                                : null
+                )
+                .bestJobMatch(
+                        bestResume != null
+                                ? bestResume.getAnalysis()
+                                        .getBestJobMatch()
+                                : null
+                )
+                .latestFileName(
+                        latestResume != null
+                                ? latestResume.getFileName()
+                                : null
+                )
+                .latestUploadedAt(
+                        latestResume != null
+                                ? latestResume.getUploadedAt()
+                                : null
+                )
+                .topSkills(
+                        latestResume != null
+                                ? splitCsv(
+                                        latestResume.getAnalysis()
+                                                .getTechnicalSkills()
+                                )
+                                : List.of()
+                )
+                .recommendations(
+                        latestResume != null
+                                ? splitCsv(
+                                        latestResume.getAnalysis()
+                                                .getRecommendations()
+                                )
+                                : List.of()
+                )
+                .build();
+    }
+
+    private List<String> splitCsv(
+            String value
+    ) {
+
+        if (value == null || value.isBlank()) {
+
+            return List.of();
+        }
+
+        List<String> items =
+                new ArrayList<>();
+
+        for (String item : value.split(",")) {
+
+            String trimmed =
+                    item.trim();
+
+            if (!trimmed.isBlank()) {
+
+                items.add(trimmed);
+            }
+        }
+
+        return items;
+    }
 
 }
