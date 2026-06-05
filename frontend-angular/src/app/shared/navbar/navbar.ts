@@ -6,6 +6,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { MatButtonModule } from '@angular/material/button';
 
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -19,4 +21,19 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class Navbar {
 
+  constructor(
+    private router: Router
+  ) {
+  }
+
+  logout(): void {
+
+    localStorage.removeItem('token');
+
+    localStorage.removeItem('email');
+
+    this.router.navigate([
+      '/login'
+    ]);
+  }
 }

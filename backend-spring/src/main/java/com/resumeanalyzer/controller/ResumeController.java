@@ -10,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
+import com.resumeanalyzer.dto.resume.ResumeHistoryResponse;
+
 @RestController
 @RequestMapping("/api/resumes")
 @RequiredArgsConstructor
@@ -32,5 +34,15 @@ public class ResumeController {
     ) {
 
         return resumeService.getUserResumes(email);
+    }
+
+    @GetMapping("/history")
+    public List<ResumeHistoryResponse>
+    getResumeHistory(
+            @RequestParam String email
+    ) {
+
+        return resumeService
+                .getResumeHistory(email);
     }
 }

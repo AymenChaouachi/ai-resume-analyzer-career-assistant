@@ -1,1 +1,42 @@
-<p>resume-history works!</p>
+<h1>Resume History</h1>
+
+<table *ngIf="histories.length > 0">
+
+  <thead>
+    <tr>
+      <th>Resume</th>
+      <th>ATS Score</th>
+      <th>Best Match</th>
+      <th>Uploaded At</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    <tr *ngFor="let history of histories">
+
+      <td>
+        {{ history.fileName }}
+      </td>
+
+      <td>
+        {{ history.atsScore }}
+      </td>
+
+      <td>
+        {{ history.bestJobMatch }}
+      </td>
+
+      <td>
+        {{ history.uploadedAt }}
+      </td>
+
+    </tr>
+
+  </tbody>
+
+</table>
+
+<p *ngIf="histories.length === 0">
+  No resumes found.
+</p>

@@ -12,6 +12,10 @@ import {
   AnalysisResult
 } from '../models/analysis-result.model';
 
+import {
+  ResumeHistory
+} from '../models/resume-history.model';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -45,6 +49,17 @@ export class ResumeService {
     return this.http.post<AnalysisResult>(
       `${this.apiUrl}/upload`,
       formData
+    );
+  }
+
+  getResumeHistory(
+  email: string
+  ) {
+
+    return this.http.get<ResumeHistory[]>(
+
+      `${this.apiUrl}/history?email=${email}`
+
     );
   }
 }

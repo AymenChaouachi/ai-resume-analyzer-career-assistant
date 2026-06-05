@@ -9,6 +9,10 @@ import { UploadResume } from './features/resume/upload-resume/upload-resume';
 
 import { Chatbot } from './features/chatbot/chatbot/chatbot';
 
+import {
+  ResumeHistory
+} from './features/resume/resume-history/resume-history';
+
 export const routes: Routes = [
 
   {
@@ -40,5 +44,11 @@ export const routes: Routes = [
   {
     path: 'chatbot',
     component: Chatbot
+  },
+
+  {
+  path: 'history',
+  component: ResumeHistory
   }
+
 ];

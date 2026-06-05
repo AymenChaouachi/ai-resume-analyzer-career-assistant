@@ -46,7 +46,12 @@ export class Login {
       next: (response) => {
 
         this.authService.saveToken(
-          response.token
+         response.token
+       );
+
+        localStorage.setItem(
+          'email',
+          this.email
         );
 
         this.router.navigate([
