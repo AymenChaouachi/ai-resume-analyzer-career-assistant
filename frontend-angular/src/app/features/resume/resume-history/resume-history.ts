@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { ResumeService }
 from '../../../services/resume';
 
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-resume-history',
   standalone: true,
@@ -17,9 +19,10 @@ export class ResumeHistory {
   histories: any[] = [];
 
   constructor(
-    private resumeService: ResumeService
-  ) {
-  }
+  private resumeService: ResumeService,
+  private router: Router
+) {
+}
 
   ngOnInit(): void {
 

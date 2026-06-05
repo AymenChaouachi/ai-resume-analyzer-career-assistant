@@ -6,23 +6,37 @@ import {
   ResumeService
 } from '../../../services/resume';
 
-import { MatCardModule } from '@angular/material/card';
+import {
+  MatCardModule
+} from '@angular/material/card';
 
-import { MatChipsModule } from '@angular/material/chips';
+import {
+  MatChipsModule
+} from '@angular/material/chips';
 
-import { MatProgressBarModule } from '@angular/material/progress-bar';
+import {
+  MatButtonModule
+} from '@angular/material/button';
 
+import {
+  MatProgressBarModule
+} from '@angular/material/progress-bar';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-upload-resume',
+
   standalone: true,
+
   imports: [
     CommonModule,
     MatCardModule,
     MatChipsModule,
+    MatButtonModule,
     MatProgressBarModule
   ],
+
   templateUrl: './upload-resume.html',
+
   styleUrl: './upload-resume.css'
 })
 export class UploadResume {
@@ -31,25 +45,43 @@ export class UploadResume {
 
   analysisResult: any;
 
+  isLoading = false;
+
+  email =
+    localStorage.getItem('email') || '';
+
   constructor(
     private resumeService: ResumeService
   ) {
   }
 
- onFileSelected(event: any): void {
+  onFileSelected(event: any): void {
 
   const file = event.target.files[0];
 
   if (file) {
+
     this.selectedFile = file;
+
+    console.log(
+      'Selected file:',
+      this.selectedFile
+    );
   }
 }
 
   uploadResume(): void {
 
+    if (!this.selectedFile) {
+
+      return;
+    }
+
+    this.isLoading = true;
+
     this.resumeService.uploadResume(
       this.selectedFile,
-      'loumi@gmail.com'
+      this.email
     ).subscribe({
 
       next: (response) => {
@@ -57,11 +89,15 @@ export class UploadResume {
         console.log(response);
 
         this.analysisResult = response;
+
+        this.isLoading = false;
       },
 
       error: (error) => {
 
         console.error(error);
+
+        this.isLoading = false;
       }
     });
   }
