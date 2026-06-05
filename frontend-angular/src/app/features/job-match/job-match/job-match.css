@@ -1,0 +1,30 @@
+.job-match-page {
+
+  max-width: 1000px;
+
+  margin: 40px auto;
+
+  padding: 20px;
+}
+
+.job-match-card,
+.result-card {
+
+  margin-bottom: 24px;
+
+  padding: 20px;
+}
+
+.full-width {
+
+  width: 100%;
+}
+
+.loading-container {
+
+  display: flex;
+
+  justify-content: center;
+
+  margin-top: 30px;
+}

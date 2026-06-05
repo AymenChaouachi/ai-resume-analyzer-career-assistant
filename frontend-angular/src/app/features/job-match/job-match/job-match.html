@@ -1,1 +1,155 @@
-<p>job-match works!</p>
+<div class="job-match-page">
+
+  <mat-card class="job-match-card">
+
+    <mat-card-title>
+      AI Job Match Analyzer
+    </mat-card-title>
+
+    <mat-card-content>
+
+      <mat-form-field
+        appearance="outline"
+        class="full-width"
+      >
+
+        <mat-label>
+          Paste Job Description
+        </mat-label>
+
+        <textarea
+          matInput
+          rows="10"
+          [(ngModel)]="jobDescription"
+        >
+        </textarea>
+
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="analyzeMatch()"
+        [disabled]="isLoading()"
+      >
+
+        {{ isLoading() ? 'Analyzing...' : 'Analyze Match' }}
+
+      </button>
+
+    </mat-card-content>
+
+  </mat-card>
+
+  <div
+    class="loading-container"
+    *ngIf="isLoading()"
+  >
+
+    <mat-spinner></mat-spinner>
+
+  </div>
+
+  <p
+    class="error-message"
+    *ngIf="errorMessage()"
+  >
+    {{ errorMessage() }}
+  </p>
+
+  <div *ngIf="result() as match">
+
+    <mat-card class="result-card">
+
+      <mat-card-title>
+        Match Score
+      </mat-card-title>
+
+      <mat-card-content>
+
+        <h1>
+          {{ match.matchScore }}%
+        </h1>
+
+      </mat-card-content>
+
+    </mat-card>
+
+    <mat-card class="result-card">
+
+      <mat-card-title>
+        Missing Skills
+      </mat-card-title>
+
+      <mat-card-content>
+
+        <mat-chip-set>
+
+          <mat-chip
+            *ngFor="
+              let skill of match.missingSkills
+            "
+          >
+            {{ skill }}
+          </mat-chip>
+
+        </mat-chip-set>
+
+      </mat-card-content>
+
+    </mat-card>
+
+    <mat-card class="result-card">
+
+      <mat-card-title>
+        Strengths
+      </mat-card-title>
+
+      <mat-card-content>
+
+        <mat-chip-set>
+
+          <mat-chip
+            *ngFor="
+              let strength of match.strengths
+            "
+          >
+            {{ strength }}
+          </mat-chip>
+
+        </mat-chip-set>
+
+      </mat-card-content>
+
+    </mat-card>
+
+    <mat-card class="result-card">
+
+      <mat-card-title>
+        Recommendations
+      </mat-card-title>
+
+      <mat-card-content>
+
+        <ul>
+
+          <li
+            *ngFor="
+              let recommendation
+              of match.recommendations
+            "
+          >
+
+            {{ recommendation }}
+
+          </li>
+
+        </ul>
+
+      </mat-card-content>
+
+    </mat-card>
+
+  </div>
+
+</div>
