@@ -1,5 +1,3 @@
-import spacy
-
 from app.nlp.skills import (
     TECHNICAL_SKILLS,
     SOFT_SKILLS
@@ -13,14 +11,10 @@ from app.services.recommendation_service import (
     generate_recommendations
 )
 
-nlp = spacy.load("en_core_web_sm")
-
 
 def analyze_resume_text(text):
 
     processed_text = text.lower()
-
-    doc = nlp(processed_text)
 
     found_technical_skills = []
     found_soft_skills = []
