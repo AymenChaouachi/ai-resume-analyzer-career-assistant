@@ -24,7 +24,7 @@ public class AIIntegrationService {
     ) {
 
         String fastApiUrl =
-                "http://localhost:8000/api/ai/analyze";
+    "https://resume-analyzer-ai-jzgz.onrender.com/api/ai/analyze";
 
         File file = new File(filePath);
 
