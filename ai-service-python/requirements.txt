@@ -7,6 +7,6 @@ spacy
 scikit-learn
 sentence-transformers
 transformers
-torch
+torch==2.3.1
 numpy
 pandas
