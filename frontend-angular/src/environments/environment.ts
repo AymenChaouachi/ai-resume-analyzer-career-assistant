@@ -2,7 +2,8 @@ export const environment = {
 
   production: false,
 
-  apiUrl: 'http://localhost:8080/api',
+  apiUrl: 'https://resume-analyzer-backend-5cin.onrender.com/api',
 
-  aiUrl: 'http://localhost:8000/api/ai'
+  aiUrl: 'https://resume-analyzer-ai-jzgz.onrender.com/api/ai'
+
 };
